@@ -22,7 +22,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import micasense.capture as capture
 from glint_estimator_uav.utils import disp_im
-from glint_estimator_uav import estimate_glint_loc
+from glint_estimator_uav.estimate_glint import estimate_glint_loc
 
 
 # Specify the following parameters
@@ -60,7 +60,7 @@ def main():
     shape = refl_ims[0].shape
 
     # extract the solar zenith and azimuth angles
-    sza_, saa = ms_capture.solar_geoms()
+    sza, saa = ms_capture.solar_geoms()
 
     pglint, p_fresnel = estimate_glint_loc(
         heading=HEADING,
@@ -78,6 +78,68 @@ def main():
     )
 
     disp_im(refl_ims[0], **{"vmin": 0.0001, "vmax": 0.6})
+    disp_im(pglint, title="glint reflectance")
+    plt.show()
+
+
+if __name__ == "__main__":
+    main()
+```
+
+
+## 2. Estimate glint from latitude, longitude, UTC datetime, wind speed and direction and camera parameters
+```python
+from datetime import datetime
+import matplotlib.pyplot as plt
+from glint_estimator_uav.utils import disp_im, solar_geoms
+from glint_estimator_uav.estimate_glint import estimate_glint_loc
+
+
+LAT = -32.135862  # decimal degrees North
+LON = 115.7468254  # decimal degrees East
+UTC_TIME = "2021-11-26 02:16:19.332937+0000"  # UTC
+WIND_SPEED = 5.0  # m/s, 10 m above sea-surface
+WIND_AZI = 270  # wind direction from north (degrees)
+
+# Specify the Micasense camera's image parameters
+CAMERA_F = 5.4e-3  # focal length (metres)
+CAMERA_PS = 3.75e-6  # pixel size (metres)
+
+# Specify the Micasens camera's perspective centre (PC)
+# Here, we assume that the PC is located in the centre
+# of the image of size (960, 1280)
+SHAPE = (960, 1280)
+PC_IMAGE = [(960 - 1.0) / 2.0, (1280 - 1.0) / 2.0]
+
+# Specify external camera orientations
+HEADING = -46.0  # direction of the top of image (degrees from North)
+PITCH = 5.0  # degrees
+ROLL = 10.0  # degrees
+
+
+def main():
+
+    # Get datetime object
+    dt = datetime.strptime("2021-11-26 02:16:19.332937+0000", "%Y-%m-%d %H:%M:%S.%f%z")
+
+    # get solar angles:
+    sza, saa = solar_geoms(lat=LAT, lon=LON, dt=dt)
+
+    pglint, p_fresnel = estimate_glint_loc(
+        heading=HEADING,
+        pitch=PITCH,
+        roll=ROLL,
+        shape=SHAPE,
+        pc_image=PC_IMAGE,
+        camera_ps=CAMERA_PS,
+        camera_f=CAMERA_F,
+        sza=sza,
+        saa=saa,
+        wind_speed=WIND_SPEED,
+        wind_azi=WIND_AZI,
+        disp_angles=True,
+    )
+
     disp_im(pglint, title="glint reflectance")
     plt.show()
 
