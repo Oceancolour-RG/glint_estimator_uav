@@ -85,8 +85,8 @@ def main():
 if __name__ == "__main__":
     main()
 ```
-![Alt text](/glint_estimator_uav/images/micasense.png?raw=true "Micasense RedEdge Band 1")
-![Alt text](/glint_estimator_uav/images/pglint1.png?raw=true "Estimate glint")
+![Alt text](relative%20/images/micasense.png?raw=true "Micasense RedEdge Band 1")
+![Alt text](relative%20/images/pglint1.png?raw=true "Estimate glint")
 
 
 ## 2. Estimate glint from latitude, longitude, UTC datetime, wind speed and direction and camera parameters
@@ -149,4 +149,4 @@ def main():
 if __name__ == "__main__":
     main()
 ```
-![Alt text](/glint_estimator_uav/images/pglint2.png?raw=true "Example 2 output")
+![Alt text](relative%20/images/pglint2.png?raw=true "Example 2 output")
