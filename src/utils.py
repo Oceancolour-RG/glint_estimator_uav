@@ -1,18 +1,35 @@
 #!/usr/bin/env python3
 
 import matplotlib.pyplot as plt
+from pathlib import Path
 from datetime import datetime
 from numpy import ndarray, full, arange
 from typing import Optional, Union, Tuple
 from pysolar.solar import get_altitude, get_azimuth
 
 
-def disp_im(im: ndarray, title: Optional[str] = None, **kwargs) -> None:
+def disp_im(
+    im: ndarray,
+    title: Optional[str] = None,
+    opng: Optional[Union[str, Path]] = None,
+    **kwargs
+) -> None:
     fig, ax = plt.subplots(nrows=1, ncols=1)
     ax.imshow(im, interpolation="None", **kwargs)
     ax.axis("off")
     if title:
         ax.set_title(title)
+
+    if opng:
+        fig.savefig(
+            opng,
+            format="png",
+            bbox_inches="tight",
+            pad_inches=0.1,
+            dpi=300,
+        )
+        print(f"wrote: {opng}")
+
     return
 
 
