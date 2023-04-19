@@ -85,6 +85,8 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+![Alt text](/relative/images/micasense.png?raw=true "Micasense RedEdge Band 1")
+![Alt text](/relative/images/pglint1.png?raw=true "Estimate glint")
 
 
 ## 2. Estimate glint from latitude, longitude, UTC datetime, wind speed and direction and camera parameters
@@ -147,3 +149,4 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+![Alt text](/relative/images/pglint2.png?raw=true "Example 2 output")
