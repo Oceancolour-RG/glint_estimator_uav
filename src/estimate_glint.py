@@ -68,8 +68,8 @@ def calc_view_angles(
     rmat = r.as_matrix()  # ndarray
 
     # Coordinate system:
-    # image x-axis: Pointing up from the PC (to match roll in "ZYX")
     # image y-axis: Pointing right from the PC (to match pitch in "ZYX")
+    # image x-axis: Pointing up from the PC (to match roll in "ZYX")
     yaxis, xaxis = meshgrid(arange(0, shape[1]), arange(shape[0] - 1, -1, -1))
     # yaxis: stack of row vectors: [0, 1, ..., ncols-1] (pointing to the right)
     # xaxis: stack of col vectors: [nrows-1, nrows-2, ..., 0] (pointing upwards)
@@ -184,6 +184,7 @@ def estimate_glint_loc(
     raa = abs(vaa - saa)  # 180 = sun behind sensor
     # raa = abs(180 + vaa - saa_)   # 0 = sun behind sensor
     raa[raa > 180] = 360 - raa[raa > 180]
+    raa = abs(raa)
 
     pglint, p_fresnel = getglint(
         vza=vza,  # ndarray
