@@ -6,19 +6,30 @@ from datetime import datetime
 from numpy import ndarray, full, arange
 from typing import Optional, Union, Tuple
 from pysolar.solar import get_altitude, get_azimuth
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
 def disp_im(
     im: ndarray,
+    add_cbar: bool = True,
     title: Optional[str] = None,
     opng: Optional[Union[str, Path]] = None,
-    **kwargs
+    cb_label: Optional[str] = None,
+    **kwargs,
 ) -> None:
     fig, ax = plt.subplots(nrows=1, ncols=1)
-    ax.imshow(im, interpolation="None", **kwargs)
+    impl_ = ax.imshow(im, interpolation="None", **kwargs)
     ax.axis("off")
     if title:
         ax.set_title(title)
+
+    if add_cbar:
+        divider = make_axes_locatable(ax)
+        cax = divider.append_axes("right", size="5%", pad=0.07)
+        cbar = fig.colorbar(impl_, cax=cax, orientation="vertical", pad=0.02)
+        if cb_label:
+            cbar.set_label(cb_label, size="large")
+        cbar.ax.tick_params(labelsize="large")
 
     if opng:
         fig.savefig(
